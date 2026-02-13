@@ -68,7 +68,7 @@ export default function TicketCard({
       {/* Header */}
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
-          <div className="flex items-center gap-2 mb-2">
+          <div className="flex items-center gap-2 mb-2 flex-wrap">
             <a
               href={issue.url}
               target="_blank"
@@ -77,14 +77,14 @@ export default function TicketCard({
             >
               {issue.identifier}
             </a>
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white">
+              {issue.title}
+            </h3>
             <span className="text-gray-400">•</span>
             <span className="text-sm text-gray-600 dark:text-gray-400">
               {getRelativeTime(comment.createdAt)}
             </span>
           </div>
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-            {issue.title}
-          </h3>
         </div>
 
         {/* Priority Badge */}
