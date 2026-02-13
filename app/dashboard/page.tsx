@@ -1,37 +1,67 @@
-import { fetchRecentComments } from "@/lib/linear/client";
-import { serializeTickets } from "@/lib/utils/serialize";
+"use client";
+
+import { useState, useEffect } from "react";
 import TicketList from "@/components/dashboard/TicketList";
 import Link from "next/link";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0; // Disable caching for fresh data
+export default function DashboardPage() {
+  const [tickets, setTickets] = useState<any[]>([]);
+  const [fetchTime, setFetchTime] = useState<string>("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
 
-export default async function DashboardPage() {
-  let tickets: any[] = [];
-  let error: string | null = null;
-  const fetchTime = new Date().toISOString();
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
-  // Check for required environment variables
-  if (!process.env.LINEAR_API_KEY) {
-    console.error("[Dashboard] LINEAR_API_KEY not configured");
-    error = "LINEAR_API_KEY environment variable is not configured in Netlify";
-  }
+  useEffect(() => {
+    if (!mounted) return;
 
-  if (!error) {
-    console.log(`[Dashboard] Fetching data at ${fetchTime}`);
+    async function loadTickets() {
+      try {
+        setLoading(true);
+        const response = await fetch("/api/tickets");
+        const data = await response.json();
 
-    try {
-      // Fetch comments from the last 14 days (filters will narrow this down)
-      // Limited to prevent Netlify function timeouts (10s free tier, 26s Pro)
-      const rawTickets = await fetchRecentComments(14);
-      console.log(`[Dashboard] Fetched ${rawTickets.length} tickets`);
-      // Serialize Linear SDK objects to plain objects for client components
-      tickets = serializeTickets(rawTickets);
-    } catch (err) {
-      error = err instanceof Error ? err.message : "Failed to fetch tickets";
-      console.error("[Dashboard] Error:", error, err);
-      tickets = [];
+        if (!response.ok) {
+          throw new Error(data.error || "Failed to fetch tickets");
+        }
+
+        setTickets(data.tickets);
+        setFetchTime(data.fetchTime);
+        setError(null);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to fetch tickets");
+        console.error("[Dashboard] Error:", err);
+      } finally {
+        setLoading(false);
+      }
     }
+
+    loadTickets();
+  }, [mounted]);
+
+  // Prevent hydration mismatch by not rendering until mounted
+  if (!mounted) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <header className="bg-white dark:bg-gray-800 shadow">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                  Service Desk Dashboard
+                </h1>
+                <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                  Monitoring Linear comments for service desk mentions
+                </p>
+              </div>
+            </div>
+          </div>
+        </header>
+      </div>
+    );
   }
 
   return (
@@ -60,31 +90,57 @@ export default async function DashboardPage() {
 
       {/* Main content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {error ? (
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-20">
+            {/* Spinner */}
+            <div className="relative w-20 h-20 mb-6">
+              <div className="w-20 h-20 border-4 border-blue-200 dark:border-blue-900 border-t-blue-600 dark:border-t-blue-400 rounded-full animate-spin"></div>
+            </div>
+
+            {/* Loading text */}
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+              Loading Dashboard...
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400 text-center max-w-md">
+              Fetching recent comments from Linear with service desk tags
+            </p>
+            <p className="text-sm text-gray-500 dark:text-gray-500 text-center max-w-md mt-3">
+              ⏱️ This may take a moment as we scan the last 14 days of comments
+            </p>
+
+            {/* Skeleton placeholders */}
+            <div className="w-full max-w-4xl mt-12 space-y-4">
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 animate-pulse"
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+                    <div className="flex-1 space-y-3">
+                      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+                      <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+                      <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-5/6"></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : error ? (
           <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6">
             <h2 className="text-lg font-semibold text-red-800 dark:text-red-200 mb-2">
-              ⚠️ Configuration Error
+              ⚠️ Error Loading Dashboard
             </h2>
             <p className="text-red-600 dark:text-red-300 mb-4 font-mono text-sm">
               {error}
             </p>
-            <div className="mt-4 p-4 bg-red-100 dark:bg-red-900/40 rounded text-sm">
-              <p className="font-semibold text-red-900 dark:text-red-100 mb-2">
-                To fix this in Netlify:
-              </p>
-              <ol className="list-decimal list-inside space-y-1 text-red-800 dark:text-red-200">
-                <li>Go to your Netlify dashboard</li>
-                <li>Navigate to: Site settings → Environment variables</li>
-                <li>Add the following variables:
-                  <ul className="list-disc list-inside ml-4 mt-1 font-mono text-xs">
-                    <li>LINEAR_API_KEY</li>
-                    <li>SLACK_WEBHOOK_URL</li>
-                    <li>LINEAR_WEBHOOK_SECRET</li>
-                  </ul>
-                </li>
-                <li>Trigger a new deploy</li>
-              </ol>
-            </div>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
+            >
+              Try Again
+            </button>
           </div>
         ) : (
           <TicketList tickets={tickets} fetchTime={fetchTime} />
