@@ -122,9 +122,13 @@ export async function fetchRecentComments(daysBack: number = 7) {
       let hasNextPage = commentsQuery.pageInfo.hasNextPage;
       let endCursor = commentsQuery.pageInfo.endCursor;
 
-      // Fetch additional pages if needed (max 1000 comments total for performance)
-      while (hasNextPage && allComments.length < 1000) {
-        console.log(`Fetching more comments (cursor: ${endCursor})...`);
+      // Fetch additional pages if needed (max 500 comments for Netlify timeout limits)
+      // On Netlify free tier, functions timeout after 10 seconds
+      let pageCount = 1;
+      const maxPages = 2; // 250 * 2 = 500 comments max
+
+      while (hasNextPage && pageCount < maxPages) {
+        console.log(`Fetching page ${pageCount + 1} (cursor: ${endCursor})...`);
         const nextPage = await client.comments({
           filter: {
             createdAt: {
@@ -137,9 +141,10 @@ export async function fetchRecentComments(daysBack: number = 7) {
         allComments = [...allComments, ...nextPage.nodes];
         hasNextPage = nextPage.pageInfo.hasNextPage;
         endCursor = nextPage.pageInfo.endCursor;
+        pageCount++;
       }
 
-      console.log(`Total comments fetched: ${allComments.length}`);
+      console.log(`Total comments fetched: ${allComments.length} (${pageCount} pages)`);
 
       for (const comment of allComments) {
         const matchedTags = getMatchingTags(comment.body || "");

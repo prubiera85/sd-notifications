@@ -139,7 +139,7 @@ export default function TicketList({ tickets, fetchTime }: TicketListProps) {
       <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 text-sm">
         <div className="flex items-center justify-between">
           <div className="text-blue-800 dark:text-blue-200">
-            <span className="font-medium">Based on last 30 days of comments</span>
+            <span className="font-medium">Based on last 14 days of comments</span>
             <span className="mx-2">•</span>
             <span>Auto-refreshes every 5 minutes</span>
           </div>

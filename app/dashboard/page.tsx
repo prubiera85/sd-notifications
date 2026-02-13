@@ -21,8 +21,9 @@ export default async function DashboardPage() {
     console.log(`[Dashboard] Fetching data at ${fetchTime}`);
 
     try {
-      // Fetch comments from the last 30 days (filters will narrow this down)
-      const rawTickets = await fetchRecentComments(30);
+      // Fetch comments from the last 14 days (filters will narrow this down)
+      // Limited to prevent Netlify function timeouts (10s free tier, 26s Pro)
+      const rawTickets = await fetchRecentComments(14);
       console.log(`[Dashboard] Fetched ${rawTickets.length} tickets`);
       // Serialize Linear SDK objects to plain objects for client components
       tickets = serializeTickets(rawTickets);
