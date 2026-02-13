@@ -54,17 +54,21 @@ export default function DashboardPage() {
     loadTickets(false);
   }, [mounted, loadTickets]);
 
-  // Auto-refresh every 5 minutes
+  // Auto-refresh disabled to prevent rate limiting
+  // Use the manual refresh button to update data
+  // Uncomment below to enable auto-refresh (30 minutes interval)
+  /*
   useEffect(() => {
     if (!mounted) return;
 
     const interval = setInterval(() => {
       console.log("Auto-refreshing dashboard...");
       loadTickets(true);
-    }, 5 * 60 * 1000); // 5 minutes
+    }, 30 * 60 * 1000); // 30 minutes
 
     return () => clearInterval(interval);
   }, [mounted, loadTickets]);
+  */
 
   // Manual refresh function
   const handleRefresh = useCallback(() => {

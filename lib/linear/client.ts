@@ -99,14 +99,14 @@ export async function fetchRecentComments(daysBack: number = 7) {
       return allComments;
     } else {
       // Fetch all comments from the organization
-      // Using a large limit to get more historical data
+      // Limited to 200 to avoid rate limiting (each comment = ~4 API calls)
       commentsQuery = await client.comments({
         filter: {
           createdAt: {
             gte: dateThreshold,
           },
         },
-        first: 250, // Linear's maximum per request
+        first: 200, // Reduced from 250 to minimize API calls
       });
 
       console.log(`Fetched ${commentsQuery.nodes.length} total comments from Linear`);
@@ -117,34 +117,9 @@ export async function fetchRecentComments(daysBack: number = 7) {
         matchedTags: string[];
       }> = [];
 
-      // Collect all comments (handle pagination)
-      let allComments = [...commentsQuery.nodes];
-      let hasNextPage = commentsQuery.pageInfo.hasNextPage;
-      let endCursor = commentsQuery.pageInfo.endCursor;
-
-      // Fetch additional pages if needed (max 400 comments for Netlify timeout limits)
-      // On Netlify free tier, functions timeout after 10 seconds
-      let pageCount = 1;
-      const maxComments = 400;
-
-      while (hasNextPage && allComments.length < maxComments && pageCount < 2) {
-        console.log(`Fetching page ${pageCount + 1} (cursor: ${endCursor})...`);
-        const nextPage = await client.comments({
-          filter: {
-            createdAt: {
-              gte: dateThreshold,
-            },
-          },
-          first: 250,
-          after: endCursor,
-        });
-        allComments = [...allComments, ...nextPage.nodes];
-        hasNextPage = nextPage.pageInfo.hasNextPage;
-        endCursor = nextPage.pageInfo.endCursor;
-        pageCount++;
-      }
-
-      console.log(`Total comments fetched: ${allComments.length} (${pageCount} pages)`);
+      // Use single page of comments to avoid rate limiting
+      const allComments = [...commentsQuery.nodes];
+      console.log(`Total comments fetched: ${allComments.length} (single page)`);
 
       for (const comment of allComments) {
         const matchedTags = getMatchingTags(comment.body || "");

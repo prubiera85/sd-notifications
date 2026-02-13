@@ -124,7 +124,7 @@ export default function TicketList({ tickets, fetchTime, onRefresh }: TicketList
           <div className="text-blue-800 dark:text-blue-200">
             <span className="font-medium">Based on last 7 days of comments</span>
             <span className="mx-2">•</span>
-            <span>Auto-refreshes every 5 minutes</span>
+            <span>Use refresh button to update</span>
           </div>
           <div className="text-blue-600 dark:text-blue-400 text-xs">
             Updated: {new Date(fetchTime).toLocaleTimeString()}
