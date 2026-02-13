@@ -8,7 +8,7 @@ export default function Home() {
           Notificaciones Service Desk
         </h1>
         <p className="text-xl text-gray-600 dark:text-gray-300">
-          Monitoreo en tiempo real de comentarios en Linear con menciones al service desk
+          Monitoreo en tiempo real de comentarios en Linear con menciones al Service Desk
         </p>
         <Link
           href="/dashboard"

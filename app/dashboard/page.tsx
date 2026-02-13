@@ -88,7 +88,7 @@ export default function DashboardPage() {
                   Dashboard Service Desk
                 </h1>
                 <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                  Monitoreando comentarios en Linear con menciones al service desk
+                  Monitoreando comentarios en Linear con menciones al Service Desk
                 </p>
               </div>
             </div>
@@ -109,7 +109,7 @@ export default function DashboardPage() {
                 Service Desk Dashboard
               </h1>
               <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                Monitoring Linear comments for service desk mentions
+                Monitoreando comentarios en Linear con menciones al Service Desk
               </p>
             </div>
             <Link
@@ -144,7 +144,7 @@ export default function DashboardPage() {
               Cargando Dashboard...
             </h2>
             <p className="text-gray-600 dark:text-gray-400 text-center max-w-md">
-              Obteniendo comentarios recientes de Linear con etiquetas de service desk
+              Obteniendo comentarios recientes de Linear con etiquetas de Service Desk
             </p>
             <p className="text-sm text-gray-500 dark:text-gray-500 text-center max-w-md mt-3">
               ⏱️ Esto puede tomar un momento mientras escaneamos los últimos 7 días de comentarios

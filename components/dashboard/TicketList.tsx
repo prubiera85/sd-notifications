@@ -155,7 +155,7 @@ export default function TicketList({ tickets, fetchTime, onRefresh }: TicketList
           </h3>
           <p className="text-gray-500 dark:text-gray-400">
             {tickets.length === 0
-              ? "No hay comentarios con etiquetas de service desk en el período seleccionado."
+              ? "No hay comentarios con etiquetas de Service Desk en el período seleccionado."
               : "Intenta ajustar tus filtros o búsqueda."}
           </p>
         </div>
