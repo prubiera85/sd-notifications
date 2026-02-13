@@ -92,14 +92,14 @@ export async function fetchRecentComments(daysBack: number = 7) {
       return allComments;
     } else {
       // Fetch all comments from the organization
-      // Limited to 200 to avoid rate limiting (each comment = ~4 API calls)
+      // Limited to 160 to avoid rate limiting with multiple users (each comment = 2 API calls)
       commentsQuery = await client.comments({
         filter: {
           createdAt: {
             gte: dateThreshold,
           },
         },
-        first: 200, // Reduced from 250 to minimize API calls
+        first: 160, // 160 × 2 = 320 calls per refresh
       });
 
       console.log(`Fetched ${commentsQuery.nodes.length} total comments from Linear`);
