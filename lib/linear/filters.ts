@@ -4,17 +4,28 @@ import { join } from "path";
 
 /**
  * Load tag patterns from configuration file
+ * Falls back to environment variable or defaults in serverless environments
  */
 export function loadTagPatterns(): TagConfig {
   try {
+    // Try environment variable first (for Netlify/Vercel)
+    const envPatterns = process.env.MONITORED_TAGS;
+    if (envPatterns) {
+      return {
+        patterns: envPatterns.split(',').map(tag => tag.trim()),
+        caseSensitive: false,
+      };
+    }
+
+    // Try reading from file system
     const configPath = join(process.cwd(), "config", "monitored-tags.json");
     const configFile = readFileSync(configPath, "utf-8");
     return JSON.parse(configFile);
   } catch (error) {
-    console.error("Failed to load tag patterns:", error);
+    console.warn("Using default tag patterns. File read failed:", error);
     // Return default configuration if file cannot be loaded
     return {
-      patterns: ["#sd", "#service-desk"],
+      patterns: ["#sd", "#service-desk", "#servicedesk"],
       caseSensitive: false,
     };
   }

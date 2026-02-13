@@ -11,18 +11,26 @@ export default async function DashboardPage() {
   let error: string | null = null;
   const fetchTime = new Date().toISOString();
 
-  console.log(`[Dashboard] Fetching data at ${fetchTime}`);
+  // Check for required environment variables
+  if (!process.env.LINEAR_API_KEY) {
+    console.error("[Dashboard] LINEAR_API_KEY not configured");
+    error = "LINEAR_API_KEY environment variable is not configured in Netlify";
+  }
 
-  try {
-    // Fetch comments from the last 30 days (filters will narrow this down)
-    const rawTickets = await fetchRecentComments(30);
-    console.log(`[Dashboard] Fetched ${rawTickets.length} tickets`);
-    // Serialize Linear SDK objects to plain objects for client components
-    tickets = serializeTickets(rawTickets);
-  } catch (err) {
-    error = err instanceof Error ? err.message : "Failed to fetch tickets";
-    console.error("Dashboard error:", error);
-    tickets = [];
+  if (!error) {
+    console.log(`[Dashboard] Fetching data at ${fetchTime}`);
+
+    try {
+      // Fetch comments from the last 30 days (filters will narrow this down)
+      const rawTickets = await fetchRecentComments(30);
+      console.log(`[Dashboard] Fetched ${rawTickets.length} tickets`);
+      // Serialize Linear SDK objects to plain objects for client components
+      tickets = serializeTickets(rawTickets);
+    } catch (err) {
+      error = err instanceof Error ? err.message : "Failed to fetch tickets";
+      console.error("[Dashboard] Error:", error, err);
+      tickets = [];
+    }
   }
 
   return (
@@ -54,13 +62,28 @@ export default async function DashboardPage() {
         {error ? (
           <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6">
             <h2 className="text-lg font-semibold text-red-800 dark:text-red-200 mb-2">
-              Error Loading Dashboard
+              ⚠️ Configuration Error
             </h2>
-            <p className="text-red-600 dark:text-red-300">{error}</p>
-            <p className="mt-4 text-sm text-red-700 dark:text-red-400">
-              Make sure your LINEAR_API_KEY is configured in environment
-              variables.
+            <p className="text-red-600 dark:text-red-300 mb-4 font-mono text-sm">
+              {error}
             </p>
+            <div className="mt-4 p-4 bg-red-100 dark:bg-red-900/40 rounded text-sm">
+              <p className="font-semibold text-red-900 dark:text-red-100 mb-2">
+                To fix this in Netlify:
+              </p>
+              <ol className="list-decimal list-inside space-y-1 text-red-800 dark:text-red-200">
+                <li>Go to your Netlify dashboard</li>
+                <li>Navigate to: Site settings → Environment variables</li>
+                <li>Add the following variables:
+                  <ul className="list-disc list-inside ml-4 mt-1 font-mono text-xs">
+                    <li>LINEAR_API_KEY</li>
+                    <li>SLACK_WEBHOOK_URL</li>
+                    <li>LINEAR_WEBHOOK_SECRET</li>
+                  </ul>
+                </li>
+                <li>Trigger a new deploy</li>
+              </ol>
+            </div>
           </div>
         ) : (
           <TicketList tickets={tickets} fetchTime={fetchTime} />

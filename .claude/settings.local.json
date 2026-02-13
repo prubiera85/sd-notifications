@@ -7,7 +7,9 @@
       "Bash(npm install:*)",
       "Bash(npm run build:*)",
       "Bash(npm run dev:*)",
-      "Skill(oneclick:commit)"
+      "Skill(oneclick:commit)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat: Initial commit - Service Desk notifications dashboard\n\nAdd complete service desk monitoring system that tracks Linear comments\nwith hashtags \\(#sd, #service-desk\\) and sends real-time Slack notifications.\n\nFeatures:\n- Real-time webhook handler for Linear comment events\n- React dashboard with filtering, search, and pagination\n- Configurable tag patterns via JSON config\n- Fetches last 30 days of comments with pagination support\n- Auto-refresh every 5 minutes\n- Netlify-ready deployment\n\n🤖 Generated with Claude Code\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git add:*)"
     ]
   }
 }
