@@ -95,32 +95,6 @@ export default function TicketCard({
         </div>
       </div>
 
-      {/* Status and Assignee */}
-      <div className="flex items-center gap-4 mb-4 text-sm">
-        <div className="flex items-center gap-2">
-          <span className="text-gray-500 dark:text-gray-400">Status:</span>
-          <span
-            className="px-2 py-1 rounded text-xs font-medium"
-            style={{
-              backgroundColor: issue.state?.color
-                ? `${issue.state.color}20`
-                : "#e5e7eb",
-              color: issue.state?.color || "#6b7280",
-            }}
-          >
-            {issue.state?.name || "Unknown"}
-          </span>
-        </div>
-        {issue.assignee && (
-          <div className="flex items-center gap-2">
-            <span className="text-gray-500 dark:text-gray-400">Assignee:</span>
-            <span className="text-gray-900 dark:text-white font-medium">
-              {issue.assignee.name}
-            </span>
-          </div>
-        )}
-      </div>
-
       {/* Tags */}
       <div className="flex flex-wrap gap-2 mb-4">
         {matchedTags.map((tag) => (
@@ -135,14 +109,6 @@ export default function TicketCard({
 
       {/* Comment */}
       <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 mb-4">
-        <div className="flex items-center gap-2 mb-2">
-          <span className="text-sm font-medium text-gray-900 dark:text-white">
-            {comment.user?.name || "Unknown"}
-          </span>
-          <span className="text-sm text-gray-500 dark:text-gray-400">
-            commented:
-          </span>
-        </div>
         <div
           className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap"
           dangerouslySetInnerHTML={{ __html: highlightedComment }}

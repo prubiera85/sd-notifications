@@ -74,20 +74,13 @@ export async function fetchRecentComments(daysBack: number = 7) {
             const matchedTags = getMatchingTags(comment.body || "");
 
             if (matchedTags.length > 0) {
-              // Fetch user and state information
-              const user = await comment.user;
-              const state = await issue.state;
-              const assignee = await issue.assignee;
-
+              // Only fetch issue data, no user/state/assignee to reduce API calls
               allComments.push({
                 comment: {
                   ...comment,
-                  _user: user,
                 },
                 issue: {
                   ...issue,
-                  _state: state,
-                  _assignee: assignee,
                 },
                 matchedTags,
               });
@@ -128,20 +121,13 @@ export async function fetchRecentComments(daysBack: number = 7) {
           const issue = await comment.issue;
 
           if (issue) {
-            // Fetch user and state information
-            const user = await comment.user;
-            const state = await issue.state;
-            const assignee = await issue.assignee;
-
+            // Only fetch issue data, no user/state/assignee to reduce API calls
             filteredComments.push({
               comment: {
                 ...comment,
-                _user: user,
               },
               issue: {
                 ...issue,
-                _state: state,
-                _assignee: assignee,
               },
               matchedTags,
             });

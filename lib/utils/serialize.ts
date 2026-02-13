@@ -46,10 +46,6 @@ export function serializeTicket(ticket: any) {
       updatedAt: ticket.comment.updatedAt instanceof Date
         ? ticket.comment.updatedAt.toISOString()
         : new Date(ticket.comment.updatedAt || Date.now()).toISOString(),
-      user: ticket.comment._user ? {
-        id: ticket.comment._user.id,
-        name: ticket.comment._user.name || 'Unknown',
-      } : null,
     },
     issue: {
       id: ticket.issue.id,
@@ -64,16 +60,6 @@ export function serializeTicket(ticket: any) {
       updatedAt: ticket.issue.updatedAt instanceof Date
         ? ticket.issue.updatedAt.toISOString()
         : new Date(ticket.issue.updatedAt || Date.now()).toISOString(),
-      state: ticket.issue._state ? {
-        id: ticket.issue._state.id,
-        name: ticket.issue._state.name || 'Unknown',
-        color: ticket.issue._state.color || '#6b7280',
-        type: ticket.issue._state.type || '',
-      } : null,
-      assignee: ticket.issue._assignee ? {
-        id: ticket.issue._assignee.id,
-        name: ticket.issue._assignee.name || 'Unknown',
-      } : null,
     },
     matchedTags: ticket.matchedTags || [],
   };
