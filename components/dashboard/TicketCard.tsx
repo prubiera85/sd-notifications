@@ -95,24 +95,17 @@ export default function TicketCard({
         </div>
       </div>
 
-      {/* Tags */}
-      <div className="flex flex-wrap gap-2 mb-4">
-        {matchedTags.map((tag) => (
-          <span
-            key={tag}
-            className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-sm font-medium rounded-full"
-          >
-            {tag}
-          </span>
-        ))}
-      </div>
-
       {/* Comment */}
-      <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4 mb-4">
-        <div
-          className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap"
-          dangerouslySetInnerHTML={{ __html: highlightedComment }}
-        />
+      <div className="mb-4">
+        <div className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
+          Comment
+        </div>
+        <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
+          <div
+            className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap"
+            dangerouslySetInnerHTML={{ __html: highlightedComment }}
+          />
+        </div>
       </div>
 
       {/* Actions */}
