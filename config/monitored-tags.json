@@ -1,0 +1,8 @@
+{
+  "patterns": [
+    "#sd",
+    "#service-desk",
+    "#servicedesk"
+  ],
+  "caseSensitive": false
+}
