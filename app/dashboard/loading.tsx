@@ -34,6 +34,9 @@ export default function DashboardLoading() {
           <p className="text-gray-600 dark:text-gray-400 text-center max-w-md">
             Fetching recent comments from Linear with service desk tags
           </p>
+          <p className="text-sm text-gray-500 dark:text-gray-500 text-center max-w-md mt-3">
+            ⏱️ This may take up to 10 seconds as we scan the last 14 days of comments
+          </p>
 
           {/* Skeleton placeholders */}
           <div className="w-full max-w-4xl mt-12 space-y-4">
