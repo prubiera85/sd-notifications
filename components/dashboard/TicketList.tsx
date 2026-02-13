@@ -22,7 +22,7 @@ export default function TicketList({ tickets, fetchTime }: TicketListProps) {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
-  const [dateRange, setDateRange] = useState<"24h" | "7d" | "30d">("7d");
+  const [dateRange, setDateRange] = useState<"24h" | "7d" | "14d">("7d");
   const [currentPage, setCurrentPage] = useState(1);
 
   // Auto-refresh every 5 minutes
@@ -65,8 +65,8 @@ export default function TicketList({ tickets, fetchTime }: TicketListProps) {
       case "7d":
         dateThreshold.setDate(now.getDate() - 7);
         break;
-      case "30d":
-        dateThreshold.setDate(now.getDate() - 30);
+      case "14d":
+        dateThreshold.setDate(now.getDate() - 14);
         break;
     }
 

@@ -6,8 +6,8 @@ interface FilterBarProps {
   selectedTag: string | null;
   onTagChange: (tag: string | null) => void;
   allTags: string[];
-  dateRange: "24h" | "7d" | "30d";
-  onDateRangeChange: (range: "24h" | "7d" | "30d") => void;
+  dateRange: "24h" | "7d" | "14d";
+  onDateRangeChange: (range: "24h" | "7d" | "14d") => void;
   onRefresh: () => void;
 }
 
@@ -53,7 +53,7 @@ export default function FilterBar({
 
         {/* Date Range */}
         <div className="flex gap-2">
-          {(["24h", "7d", "30d"] as const).map((range) => (
+          {(["24h", "7d", "14d"] as const).map((range) => (
             <button
               key={range}
               onClick={() => onDateRangeChange(range)}
