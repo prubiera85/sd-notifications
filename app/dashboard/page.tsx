@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import TicketList from "@/components/dashboard/TicketList";
 import Link from "next/link";
 
@@ -8,39 +8,69 @@ export default function DashboardPage() {
   const [tickets, setTickets] = useState<any[]>([]);
   const [fetchTime, setFetchTime] = useState<string>("");
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
+
+  const loadTickets = useCallback(async (isRefresh = false) => {
+    try {
+      if (isRefresh) {
+        setRefreshing(true);
+      } else {
+        setLoading(true);
+      }
+
+      const response = await fetch("/api/tickets", {
+        cache: "no-store",
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to fetch tickets");
+      }
+
+      setTickets(data.tickets);
+      setFetchTime(data.fetchTime);
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to fetch tickets");
+      console.error("[Dashboard] Error:", err);
+    } finally {
+      if (isRefresh) {
+        setRefreshing(false);
+      } else {
+        setLoading(false);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  // Initial load
+  useEffect(() => {
+    if (!mounted) return;
+    loadTickets(false);
+  }, [mounted, loadTickets]);
+
+  // Auto-refresh every 5 minutes
   useEffect(() => {
     if (!mounted) return;
 
-    async function loadTickets() {
-      try {
-        setLoading(true);
-        const response = await fetch("/api/tickets");
-        const data = await response.json();
+    const interval = setInterval(() => {
+      console.log("Auto-refreshing dashboard...");
+      loadTickets(true);
+    }, 5 * 60 * 1000); // 5 minutes
 
-        if (!response.ok) {
-          throw new Error(data.error || "Failed to fetch tickets");
-        }
+    return () => clearInterval(interval);
+  }, [mounted, loadTickets]);
 
-        setTickets(data.tickets);
-        setFetchTime(data.fetchTime);
-        setError(null);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to fetch tickets");
-        console.error("[Dashboard] Error:", err);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    loadTickets();
-  }, [mounted]);
+  // Manual refresh function
+  const handleRefresh = useCallback(() => {
+    console.log("Manual refresh triggered");
+    loadTickets(true);
+  }, [loadTickets]);
 
   // Prevent hydration mismatch by not rendering until mounted
   if (!mounted) {
@@ -87,6 +117,14 @@ export default function DashboardPage() {
           </div>
         </div>
       </header>
+
+      {/* Refreshing indicator - subtle, non-intrusive */}
+      {refreshing && (
+        <div className="fixed top-4 right-4 z-50 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2">
+          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+          <span className="text-sm font-medium">Refreshing...</span>
+        </div>
+      )}
 
       {/* Main content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -136,14 +174,18 @@ export default function DashboardPage() {
               {error}
             </p>
             <button
-              onClick={() => window.location.reload()}
+              onClick={() => loadTickets(false)}
               className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
             >
               Try Again
             </button>
           </div>
         ) : (
-          <TicketList tickets={tickets} fetchTime={fetchTime} />
+          <TicketList
+            tickets={tickets}
+            fetchTime={fetchTime}
+            onRefresh={handleRefresh}
+          />
         )}
       </main>
     </div>

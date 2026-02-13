@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import TicketCard from "./TicketCard";
 import FilterBar from "./FilterBar";
 
@@ -14,26 +13,16 @@ interface TicketData {
 interface TicketListProps {
   tickets: TicketData[];
   fetchTime: string;
+  onRefresh: () => void;
 }
 
 const TICKETS_PER_PAGE = 20;
 
-export default function TicketList({ tickets, fetchTime }: TicketListProps) {
-  const router = useRouter();
+export default function TicketList({ tickets, fetchTime, onRefresh }: TicketListProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [dateRange, setDateRange] = useState<"24h" | "7d">("7d");
   const [currentPage, setCurrentPage] = useState(1);
-
-  // Auto-refresh every 5 minutes
-  useEffect(() => {
-    const interval = setInterval(() => {
-      console.log("Auto-refreshing dashboard...");
-      router.refresh();
-    }, 5 * 60 * 1000); // 5 minutes in milliseconds
-
-    return () => clearInterval(interval);
-  }, [router]);
 
   // Reset to page 1 when filters change
   useEffect(() => {
@@ -126,10 +115,7 @@ export default function TicketList({ tickets, fetchTime }: TicketListProps) {
         allTags={allTags}
         dateRange={dateRange}
         onDateRangeChange={setDateRange}
-        onRefresh={() => {
-          console.log("Manual refresh triggered");
-          router.refresh();
-        }}
+        onRefresh={onRefresh}
       />
 
       {/* Info banner */}
