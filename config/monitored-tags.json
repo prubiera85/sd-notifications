@@ -2,7 +2,8 @@
   "patterns": [
     "#sd",
     "#service-desk",
-    "#servicedesk"
+    "#servicedesk",
+    "#kjm"
   ],
   "caseSensitive": false
 }
