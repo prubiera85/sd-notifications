@@ -16,7 +16,7 @@ export async function GET() {
     }
 
     console.log("[API] Fetching tickets...");
-    const rawTickets = await fetchRecentComments(14);
+    const rawTickets = await fetchRecentComments(7);
     console.log(`[API] Fetched ${rawTickets.length} tickets`);
 
     const tickets = serializeTickets(rawTickets);

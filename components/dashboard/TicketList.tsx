@@ -22,7 +22,7 @@ export default function TicketList({ tickets, fetchTime }: TicketListProps) {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
-  const [dateRange, setDateRange] = useState<"24h" | "7d" | "14d">("7d");
+  const [dateRange, setDateRange] = useState<"24h" | "7d">("7d");
   const [currentPage, setCurrentPage] = useState(1);
 
   // Auto-refresh every 5 minutes
@@ -64,9 +64,6 @@ export default function TicketList({ tickets, fetchTime }: TicketListProps) {
         break;
       case "7d":
         dateThreshold.setDate(now.getDate() - 7);
-        break;
-      case "14d":
-        dateThreshold.setDate(now.getDate() - 14);
         break;
     }
 
@@ -139,7 +136,7 @@ export default function TicketList({ tickets, fetchTime }: TicketListProps) {
       <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 text-sm">
         <div className="flex items-center justify-between">
           <div className="text-blue-800 dark:text-blue-200">
-            <span className="font-medium">Based on last 14 days of comments</span>
+            <span className="font-medium">Based on last 7 days of comments</span>
             <span className="mx-2">•</span>
             <span>Auto-refreshes every 5 minutes</span>
           </div>

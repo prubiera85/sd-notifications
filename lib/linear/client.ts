@@ -122,12 +122,12 @@ export async function fetchRecentComments(daysBack: number = 7) {
       let hasNextPage = commentsQuery.pageInfo.hasNextPage;
       let endCursor = commentsQuery.pageInfo.endCursor;
 
-      // Fetch additional pages if needed (max 500 comments for Netlify timeout limits)
+      // Fetch additional pages if needed (max 400 comments for Netlify timeout limits)
       // On Netlify free tier, functions timeout after 10 seconds
       let pageCount = 1;
-      const maxPages = 2; // 250 * 2 = 500 comments max
+      const maxComments = 400;
 
-      while (hasNextPage && pageCount < maxPages) {
+      while (hasNextPage && allComments.length < maxComments && pageCount < 2) {
         console.log(`Fetching page ${pageCount + 1} (cursor: ${endCursor})...`);
         const nextPage = await client.comments({
           filter: {

@@ -105,7 +105,7 @@ export default function DashboardPage() {
               Fetching recent comments from Linear with service desk tags
             </p>
             <p className="text-sm text-gray-500 dark:text-gray-500 text-center max-w-md mt-3">
-              ⏱️ This may take a moment as we scan the last 14 days of comments
+              ⏱️ This may take a moment as we scan the last 7 days of comments
             </p>
 
             {/* Skeleton placeholders */}
