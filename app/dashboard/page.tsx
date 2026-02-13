@@ -85,10 +85,10 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                  Service Desk Dashboard
+                  Dashboard Service Desk
                 </h1>
                 <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                  Monitoring Linear comments for service desk mentions
+                  Monitoreando comentarios en Linear con menciones al service desk
                 </p>
               </div>
             </div>
@@ -116,7 +116,7 @@ export default function DashboardPage() {
               href="/"
               className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
             >
-              ← Back to Home
+              ← Volver al inicio
             </Link>
           </div>
         </div>
@@ -126,7 +126,7 @@ export default function DashboardPage() {
       {refreshing && (
         <div className="fixed top-4 right-4 z-50 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2">
           <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-          <span className="text-sm font-medium">Refreshing...</span>
+          <span className="text-sm font-medium">Actualizando...</span>
         </div>
       )}
 
@@ -141,13 +141,13 @@ export default function DashboardPage() {
 
             {/* Loading text */}
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-              Loading Dashboard...
+              Cargando Dashboard...
             </h2>
             <p className="text-gray-600 dark:text-gray-400 text-center max-w-md">
-              Fetching recent comments from Linear with service desk tags
+              Obteniendo comentarios recientes de Linear con etiquetas de service desk
             </p>
             <p className="text-sm text-gray-500 dark:text-gray-500 text-center max-w-md mt-3">
-              ⏱️ This may take a moment as we scan the last 7 days of comments
+              ⏱️ Esto puede tomar un momento mientras escaneamos los últimos 7 días de comentarios
             </p>
 
             {/* Skeleton placeholders */}
@@ -172,7 +172,7 @@ export default function DashboardPage() {
         ) : error ? (
           <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6">
             <h2 className="text-lg font-semibold text-red-800 dark:text-red-200 mb-2">
-              ⚠️ Error Loading Dashboard
+              ⚠️ Error al Cargar el Dashboard
             </h2>
             <p className="text-red-600 dark:text-red-300 mb-4 font-mono text-sm">
               {error}
@@ -181,7 +181,7 @@ export default function DashboardPage() {
               onClick={() => loadTickets(false)}
               className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
             >
-              Try Again
+              Intentar de Nuevo
             </button>
           </div>
         ) : (

@@ -31,15 +31,15 @@ export default function TicketCard({
   const getPriorityInfo = (priority: number) => {
     switch (priority) {
       case 1:
-        return { label: "Urgent", color: "bg-red-500" };
+        return { label: "Urgente", color: "bg-red-500" };
       case 2:
-        return { label: "High", color: "bg-orange-500" };
+        return { label: "Alta", color: "bg-orange-500" };
       case 3:
         return { label: "Normal", color: "bg-yellow-500" };
       case 4:
-        return { label: "Low", color: "bg-gray-400" };
+        return { label: "Baja", color: "bg-gray-400" };
       default:
-        return { label: "None", color: "bg-gray-300" };
+        return { label: "Ninguna", color: "bg-gray-300" };
     }
   };
 
@@ -98,7 +98,7 @@ export default function TicketCard({
       {/* Comment */}
       <div className="mb-4">
         <div className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
-          Comment
+          Comentario
         </div>
         <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-4">
           <div
@@ -116,7 +116,7 @@ export default function TicketCard({
           rel="noopener noreferrer"
           className="text-sm text-blue-600 dark:text-blue-400 hover:underline font-medium"
         >
-          Open in Linear →
+          Abrir en Linear →
         </a>
       </div>
     </div>

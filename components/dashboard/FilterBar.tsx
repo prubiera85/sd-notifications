@@ -28,7 +28,7 @@ export default function FilterBar({
         <div className="flex-1">
           <input
             type="text"
-            placeholder="Search by title, identifier, or comment..."
+            placeholder="Buscar por título, identificador o comentario..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
@@ -42,7 +42,7 @@ export default function FilterBar({
             onChange={(e) => onTagChange(e.target.value || null)}
             className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           >
-            <option value="">All Tags</option>
+            <option value="">Todas las Etiquetas</option>
             {allTags.map((tag) => (
               <option key={tag} value={tag}>
                 {tag}
@@ -72,9 +72,9 @@ export default function FilterBar({
         <button
           onClick={onRefresh}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium shadow-sm"
-          title="Refresh data from Linear"
+          title="Actualizar datos de Linear"
         >
-          ↻ Refresh
+          ↻ Actualizar
         </button>
       </div>
     </div>

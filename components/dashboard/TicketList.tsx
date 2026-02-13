@@ -122,12 +122,12 @@ export default function TicketList({ tickets, fetchTime, onRefresh }: TicketList
       <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 text-sm">
         <div className="flex items-center justify-between">
           <div className="text-blue-800 dark:text-blue-200">
-            <span className="font-medium">Based on last 7 days of comments</span>
+            <span className="font-medium">Basado en los últimos 7 días de comentarios</span>
             <span className="mx-2">•</span>
-            <span>Use refresh button to update</span>
+            <span>Usa el botón de actualizar para refrescar</span>
           </div>
           <div className="text-blue-600 dark:text-blue-400 text-xs">
-            Updated: {new Date(fetchTime).toLocaleTimeString()}
+            Actualizado: {new Date(fetchTime).toLocaleTimeString()}
           </div>
         </div>
       </div>
@@ -151,22 +151,22 @@ export default function TicketList({ tickets, fetchTime, onRefresh }: TicketList
             </svg>
           </div>
           <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-            No tickets found
+            No se encontraron tickets
           </h3>
           <p className="text-gray-500 dark:text-gray-400">
             {tickets.length === 0
-              ? "No comments with service desk tags in the selected time period."
-              : "Try adjusting your filters or search query."}
+              ? "No hay comentarios con etiquetas de service desk en el período seleccionado."
+              : "Intenta ajustar tus filtros o búsqueda."}
           </p>
         </div>
       ) : (
         <>
           <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 mb-4">
             <p>
-              Showing {startIndex + 1}-{Math.min(endIndex, filteredTickets.length)} of {filteredTickets.length} tickets
+              Mostrando {startIndex + 1}-{Math.min(endIndex, filteredTickets.length)} de {filteredTickets.length} tickets
             </p>
             <p>
-              Page {currentPage} of {totalPages}
+              Página {currentPage} de {totalPages}
             </p>
           </div>
 
@@ -189,7 +189,7 @@ export default function TicketList({ tickets, fetchTime, onRefresh }: TicketList
                 disabled={currentPage === 1}
                 className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                Previous
+                Anterior
               </button>
 
               <div className="flex gap-1">
@@ -226,7 +226,7 @@ export default function TicketList({ tickets, fetchTime, onRefresh }: TicketList
                 disabled={currentPage === totalPages}
                 className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                Next
+                Siguiente
               </button>
             </div>
           )}
