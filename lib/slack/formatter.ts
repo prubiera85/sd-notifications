@@ -9,76 +9,18 @@ export function formatServiceDeskNotification(
   comment: any,
   matchedTags: string[]
 ): SlackMessage {
-  // Truncate comment body if too long
-  const maxLength = 300;
-  const commentBody = comment.body || "";
-  const truncatedComment =
-    commentBody.length > maxLength
-      ? commentBody.substring(0, maxLength) + "..."
-      : commentBody;
-
-  // Highlight matched tags in the comment
-  let highlightedComment = truncatedComment;
-  matchedTags.forEach((tag) => {
-    const regex = new RegExp(tag, "gi");
-    highlightedComment = highlightedComment.replace(regex, `*${tag}*`);
-  });
+  const authorName = comment.user?.name || "Desconocido";
+  const priorityLabel = getPriorityLabel(issue.priority);
 
   const message: SlackMessage = {
-    text: `🔔 Service Desk Mention in ${issue.identifier}: ${issue.title}`,
+    text: `Han mencionado al equipo de SD en un ticket: ${issue.identifier}`,
     blocks: [
       {
-        type: "header",
-        text: {
-          type: "plain_text",
-          text: "🔔 Service Desk Mention",
-        },
-      },
-      {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `*<${issue.url}|${issue.identifier}: ${issue.title}>*`,
+          text: `Han mencionado al equipo de SD en un ticket\n\n*Ticket:* <${issue.url}|${issue.title}>\n\n*Mencionado por:* ${authorName} - *Prioridad:* ${priorityLabel}`,
         },
-      },
-      {
-        type: "section",
-        fields: [
-          {
-            type: "mrkdwn",
-            text: `*Priority:*\n${getPriorityLabel(issue.priority)}`,
-          },
-        ],
-      },
-      {
-        type: "section",
-        text: {
-          type: "mrkdwn",
-          text: `*Comment by ${comment.user?.name || "Unknown"}:*\n${highlightedComment}`,
-        },
-      },
-      {
-        type: "actions",
-        elements: [
-          {
-            type: "button",
-            text: {
-              type: "plain_text",
-              text: "Open in Linear",
-            },
-            url: issue.url,
-            action_id: "open_linear",
-          },
-        ],
-      },
-      {
-        type: "context",
-        elements: [
-          {
-            type: "mrkdwn",
-            text: `<!date^${Math.floor(new Date(comment.createdAt).getTime() / 1000)}^{date_short_pretty} at {time}|${comment.createdAt}>`,
-          },
-        ],
       },
     ],
   };
