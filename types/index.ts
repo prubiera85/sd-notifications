@@ -69,6 +69,7 @@ export interface SlackBlock {
   text?: {
     type: string;
     text: string;
+    emoji?: boolean;
   };
   fields?: Array<{
     type: string;
