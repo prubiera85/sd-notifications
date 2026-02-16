@@ -20,7 +20,7 @@ const TICKETS_PER_PAGE = 20;
 
 export default function TicketList({ tickets, fetchTime, onRefresh }: TicketListProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [selectedTag, setSelectedTag] = useState<string | null>("#sd");
   const [dateRange, setDateRange] = useState<"24h" | "7d">("7d");
   const [currentPage, setCurrentPage] = useState(1);
 
