@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { validateLinearWebhook, isValidTimestamp } from "@/lib/utils/webhook-validator";
 import { getMatchingTags } from "@/lib/linear/filters";
-import { fetchIssueById } from "@/lib/linear/client";
+import { fetchIssueById, fetchCommentById } from "@/lib/linear/client";
 import { formatServiceDeskNotification } from "@/lib/slack/formatter";
 import { sendNotification } from "@/lib/slack/client";
 import type { LinearWebhookPayload } from "@/types";
@@ -97,8 +97,9 @@ export async function POST(request: NextRequest) {
 
     console.log("Matched tags:", matchedTags);
 
-    // 9. Fetch full issue context
+    // 9. Fetch full issue and comment context
     const issueId = commentData.issueId;
+    const commentId = commentData.id;
 
     if (!issueId) {
       console.error("Comment has no issueId");
@@ -108,13 +109,23 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    if (!commentId) {
+      console.error("Comment has no id");
+      return NextResponse.json({
+        ok: true,
+        message: "Comment has no id",
+      });
+    }
+
     let issue;
+    let comment;
     try {
       issue = await fetchIssueById(issueId);
+      comment = await fetchCommentById(commentId);
     } catch (error) {
-      console.error("Failed to fetch issue:", error);
+      console.error("Failed to fetch issue or comment:", error);
       return NextResponse.json(
-        { error: "Failed to fetch issue details" },
+        { error: "Failed to fetch issue or comment details" },
         { status: 500 }
       );
     }
@@ -123,7 +134,7 @@ export async function POST(request: NextRequest) {
     try {
       const message = formatServiceDeskNotification(
         issue,
-        commentData,
+        comment,
         matchedTags
       );
 

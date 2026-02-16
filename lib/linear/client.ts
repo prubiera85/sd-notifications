@@ -37,6 +37,20 @@ export async function fetchIssueById(issueId: string): Promise<Issue> {
 }
 
 /**
+ * Fetch a comment by ID with full details including user
+ */
+export async function fetchCommentById(commentId: string): Promise<Comment> {
+  const client = getLinearClient();
+  const comment = await client.comment(commentId);
+
+  if (!comment) {
+    throw new Error(`Comment not found: ${commentId}`);
+  }
+
+  return comment;
+}
+
+/**
  * Fetch recent comments from the last N days
  * Returns comments that contain monitored hashtags
  */
