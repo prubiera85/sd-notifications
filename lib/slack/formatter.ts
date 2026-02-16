@@ -46,19 +46,7 @@ export function formatServiceDeskNotification(
         fields: [
           {
             type: "mrkdwn",
-            text: `*Status:*\n${issue.state?.name || "Unknown"}`,
-          },
-          {
-            type: "mrkdwn",
             text: `*Priority:*\n${getPriorityLabel(issue.priority)}`,
-          },
-          {
-            type: "mrkdwn",
-            text: `*Assignee:*\n${issue.assignee?.name || "Unassigned"}`,
-          },
-          {
-            type: "mrkdwn",
-            text: `*Tags:*\n${matchedTags.join(", ")}`,
           },
         ],
       },
