@@ -132,10 +132,13 @@ export async function POST(request: NextRequest) {
 
     // 10. Format and send Slack notification
     try {
+      const isEdit = payload.action === "update";
+
       const message = formatServiceDeskNotification(
         issue,
         comment,
-        matchedTags
+        matchedTags,
+        isEdit
       );
 
       const result = await sendNotification(message);

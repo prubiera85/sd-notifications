@@ -7,7 +7,8 @@ import type { SlackMessage } from "@/types";
 export function formatServiceDeskNotification(
   issue: any,
   comment: any,
-  matchedTags: string[]
+  matchedTags: string[],
+  isEdit: boolean = false
 ): SlackMessage {
   const authorName = comment.user?.name || "Desconocido";
   const priorityLabel = getPriorityLabel(issue.priority);
@@ -21,6 +22,16 @@ export function formatServiceDeskNotification(
     messageText += `\n\n*Prioridad:* ${priorityLabel}`;
   }
 
+  // Add edit indicator if this is an edited comment
+  if (isEdit) {
+    messageText += `\n\n✏️ _Comentario editado_`;
+  }
+
+  // Determine header text and emoji based on whether it's an edit
+  const headerText = isEdit
+    ? "✏️ Comentario editado con mención al equipo de SD"
+    : "🔔 Han mencionado al equipo de SD en un ticket";
+
   const message: SlackMessage = {
     text: `Han mencionado al equipo de SD en un ticket: ${issue.identifier}`,
     blocks: [
@@ -28,7 +39,7 @@ export function formatServiceDeskNotification(
         type: "header",
         text: {
           type: "plain_text",
-          text: "🔔 Han mencionado al equipo de SD en un ticket",
+          text: headerText,
           emoji: true,
         },
       },
